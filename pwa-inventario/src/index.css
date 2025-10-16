@@ -1,0 +1,53 @@
+/* src/index.css */
+
+/* --- FUENTES Y ESTILOS BASE --- */
+
+/* Importar una fuente profesional (ej. Roboto o Inter) */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+body {
+    /* Base de color: Blanco puro para limpieza. */
+    background-color: #f7f9fc; 
+    /* Fuente clara y legible. */
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+h1, h2, h3 {
+    color: #004d99; /* Azul marino/clínico para encabezados */
+    font-weight: 700;
+    margin-top: 0;
+}
+
+/* --- ESTILOS DE FORMULARIO BASE (Inputs, Selects) --- */
+
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc; /* Gris claro para bordes */
+    border-radius: 6px;
+    box-sizing: border-box; /* Fundamental para el ancho del 100% */
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+    border-color: #007bff; /* Azul primario al enfocar */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #555;
+}
