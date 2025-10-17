@@ -1,0 +1,23 @@
+{
+    "name": "PWA Inventario App",
+    "short_name": "Inventario",
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#000000",
+    "description": "Aplicación de inventario PWA.",
+    "icons": [
+    {
+        "src": "/hospital.png",
+        "sizes": "192x192", 
+        "type": "image/png",
+        "purpose": "any maskable" 
+    },
+    {
+        "src": "/hospital.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "any"
+    }
+]
+}
