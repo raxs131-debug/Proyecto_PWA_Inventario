@@ -1,13 +1,22 @@
+/*
+|================================================================
+| ESTILOS BASE (MOBILE-FIRST)
+| Aplicados por defecto a pantallas pequeñas (teléfonos)
+|================================================================
+*/
 #root {
+  /* En móvil, reducimos el padding para maximizar el espacio vertical */
+  padding: 1rem; 
+  /* El resto de estilos se mantienen para centrado y límite de ancho */
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
 
 .logo {
-  height: 6em;
-  padding: 1.5em;
+  /* Reducimos el tamaño en móvil para que no ocupe demasiado */
+  height: 4em; 
+  padding: 1em;
   will-change: filter;
   transition: filter 300ms;
 }
@@ -34,9 +43,86 @@
 }
 
 .card {
-  padding: 2em;
+  padding: 1.5em; /* Ligeramente más pequeño en móvil */
 }
 
 .read-the-docs {
   color: #888;
+  font-size: 0.9rem; /* Fuente un poco más pequeña en móvil */
+}
+
+/*
+|================================================================
+| AJUSTES PARA PANTALLAS GRANDES (ESCRITORIO/TABLET)
+| Vuelve a usar los valores originales, ya que son ideales para estas pantallas
+|================================================================
+*/
+@media (min-width: 768px) {
+  #root {
+    padding: 2rem; /* El padding original es apropiado */
+  }
+
+  .logo {
+    height: 6em; /* El tamaño original del logo */
+    padding: 1.5em;
+  }
+  
+  .card {
+    padding: 2em; /* El padding original */
+  }
+  
+  .read-the-docs {
+    font-size: 1rem;
+  }
+}
+
+/*
+|================================================================
+| OPTIMIZACIÓN PARA TV (DISTANCIA DE VISIÓN Y NAVEGACIÓN CON REMOTO)
+| Usamos una media query para pantallas muy grandes (como TVs 1080p o 4K)
+| y ajustamos el foco para la navegación con control remoto.
+|================================================================
+*/
+@media (min-width: 1920px) {
+  /*
+  ** 1. Legibilidad a Distancia (Aumentar todo el tamaño) **
+  */
+  
+  /* Ajustamos el tamaño base de la fuente de todo el contenido */
+  body {
+    font-size: 125%; 
+  }
+  
+  #root {
+    /* Aumentamos mucho el padding para que el contenido no esté pegado al borde */
+    padding: 5rem; 
+  }
+
+  .logo {
+    /* Hacemos el logo mucho más grande para ser visible a distancia */
+    height: 10em;
+    padding: 2.5em;
+  }
+  
+  .card {
+    /* Aumentamos el padding interno de las tarjetas */
+    padding: 4em; 
+  }
+  
+  .read-the-docs {
+    font-size: 1.25rem; /* Aseguramos que el texto de ayuda sea legible */
+  }
+
+  /*
+  ** 2. Usabilidad y Foco con Control Remoto **
+  */
+  /* Damos un borde claro y grueso a los elementos interactivos al enfocarlos */
+  a:focus,
+  button:focus {
+    outline: none; /* Quitamos el foco por defecto del navegador */
+    /* Resaltado visual para navegación con control remoto */
+    box-shadow: 0 0 0 5px #fff, 0 0 0 10px #646cff; 
+    border-radius: 4px;
+    transition: box-shadow 0.2s;
+  }
 }
