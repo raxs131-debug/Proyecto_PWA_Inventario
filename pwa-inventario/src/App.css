@@ -1,128 +1,169 @@
 /*
 |================================================================
-| ESTILOS BASE (MOBILE-FIRST)
+| 0. VARIABLES CSS GLOBALES (CUSTOM PROPERTIES)
+|================================================================
+*/
+:root {
+    /* Colores */
+    --color-primary: #646cff;
+    --color-secondary: #61dafbaa;
+    --color-text-docs: #888;
+    --color-background: #f8f8f8;
+    --color-overlay: rgba(255, 255, 255, 0.9);
+
+    /* Espaciado y Escala Base (Mobile-First) */
+    --padding-base: 1rem;
+    --logo-height-base: 4em;
+    --logo-padding-base: 1em;
+    --card-padding-base: 1.5em;
+    --font-size-docs-base: 0.9rem;
+}
+
+/*
+|================================================================
+| 1. ESTILOS GLOBALES Y DE FONDO PWA
+|================================================================
+*/
+/* Aseguramos que el HTML y el BODY ocupen toda la altura de la ventana */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+/* Aplicamos la imagen de fondo al BODY */
+body {
+    background-image: url('../public/logo-salud-2024.jpg'); 
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-color: var(--color-background);
+}
+
+
+/*
+|================================================================
+| 2. ESTILOS BASE (MOBILE-FIRST)
 | Aplicados por defecto a pantallas pequeñas (teléfonos)
 |================================================================
 */
 #root {
-  /* En móvil, reducimos el padding para maximizar el espacio vertical */
-  padding: 1rem; 
-  /* El resto de estilos se mantienen para centrado y límite de ancho */
-  max-width: 1280px;
-  margin: 0 auto;
-  text-align: center;
+    /* Aplicamos el overlay blanco semi-transparente y aseguramos la altura mínima */
+    background-color: var(--color-overlay);
+    min-height: 100vh;
+    
+    padding: var(--padding-base);
+    max-width: 1280px;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .logo {
-  /* Reducimos el tamaño en móvil para que no ocupe demasiado */
-  height: 4em; 
-  padding: 1em;
-  will-change: filter;
-  transition: filter 300ms;
+    height: var(--logo-height-base);
+    padding: var(--logo-padding-base);
+    will-change: filter;
+    transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+    filter: drop-shadow(0 0 2em var(--color-primary)aa);
 }
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+    filter: drop-shadow(0 0 2em var(--color-secondary)); /* Se corrigió el error en el alpha, ahora usa la variable completa */
 }
 
 @keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+    a:nth-of-type(2) .logo {
+        animation: logo-spin infinite 20s linear;
+    }
 }
 
 .card {
-  padding: 1.5em; /* Ligeramente más pequeño en móvil */
+    padding: var(--card-padding-base);
 }
 
 .read-the-docs {
-  color: #888;
-  font-size: 0.9rem; /* Fuente un poco más pequeña en móvil */
+    color: var(--color-text-docs);
+    font-size: var(--font-size-docs-base);
 }
 
 /*
 |================================================================
-| AJUSTES PARA PANTALLAS GRANDES (ESCRITORIO/TABLET)
-| Vuelve a usar los valores originales, ya que son ideales para estas pantallas
+| 3. AJUSTES PARA PANTALLAS GRANDES (ESCRITORIO/TABLET)
 |================================================================
 */
 @media (min-width: 768px) {
-  #root {
-    padding: 2rem; /* El padding original es apropiado */
-  }
+    #root {
+        /* Escalado de padding: de 1rem a 2rem */
+        padding: 2rem; 
+    }
 
-  .logo {
-    height: 6em; /* El tamaño original del logo */
-    padding: 1.5em;
-  }
-  
-  .card {
-    padding: 2em; /* El padding original */
-  }
-  
-  .read-the-docs {
-    font-size: 1rem;
-  }
+    .logo {
+        /* Escalado de logo */
+        height: 6em; 
+        padding: 1.5em;
+    }
+    
+    .card {
+        /* Escalado de padding de tarjeta: de 1.5em a 2em */
+        padding: 2em;
+    }
+    
+    .read-the-docs {
+        /* Escalado de fuente: de 0.9rem a 1rem */
+        font-size: 1rem;
+    }
 }
 
 /*
 |================================================================
-| OPTIMIZACIÓN PARA TV (DISTANCIA DE VISIÓN Y NAVEGACIÓN CON REMOTO)
-| Usamos una media query para pantallas muy grandes (como TVs 1080p o 4K)
-| y ajustamos el foco para la navegación con control remoto.
+| 4. OPTIMIZACIÓN PARA TV (Pantallas Ultra-Grandes)
 |================================================================
 */
 @media (min-width: 1920px) {
-  /*
-  ** 1. Legibilidad a Distancia (Aumentar todo el tamaño) **
-  */
-  
-  /* Ajustamos el tamaño base de la fuente de todo el contenido */
-  body {
-    font-size: 125%; 
-  }
-  
-  #root {
-    /* Aumentamos mucho el padding para que el contenido no esté pegado al borde */
-    padding: 5rem; 
-  }
+    
+    /* 1. Legibilidad a Distancia */
+    
+    /* Ajustamos el tamaño base de la fuente (escala todo el texto) */
+    body {
+        font-size: 1.25em; /* Equivalente a 125% */
+    }
+    
+    #root {
+        /* Padding grande para centrar el foco (5rem) */
+        padding: 5rem;
+    }
 
-  .logo {
-    /* Hacemos el logo mucho más grande para ser visible a distancia */
-    height: 10em;
-    padding: 2.5em;
-  }
-  
-  .card {
-    /* Aumentamos el padding interno de las tarjetas */
-    padding: 4em; 
-  }
-  
-  .read-the-docs {
-    font-size: 1.25rem; /* Aseguramos que el texto de ayuda sea legible */
-  }
+    .logo {
+        /* Logo mucho más grande (10em) */
+        height: 10em;
+        padding: 2.5em;
+    }
+    
+    .card {
+        /* Padding interno de las tarjetas grande (4em) */
+        padding: 4em;
+    }
+    
+    .read-the-docs {
+        font-size: 1.25rem;
+    }
 
-  /*
-  ** 2. Usabilidad y Foco con Control Remoto **
-  */
-  /* Damos un borde claro y grueso a los elementos interactivos al enfocarlos */
-  a:focus,
-  button:focus {
-    outline: none; /* Quitamos el foco por defecto del navegador */
-    /* Resaltado visual para navegación con control remoto */
-    box-shadow: 0 0 0 5px #fff, 0 0 0 10px #646cff; 
-    border-radius: 4px;
-    transition: box-shadow 0.2s;
-  }
+    /* 2. Usabilidad y Foco con Control Remoto (Destacado visual) */
+    a:focus,
+    button:focus {
+        outline: none; 
+        /* Resaltado visual usando la variable de color primario */
+        box-shadow: 0 0 0 5px #fff, 0 0 0 10px var(--color-primary); 
+        border-radius: 4px;
+        transition: box-shadow 0.2s;
+    }
 }
