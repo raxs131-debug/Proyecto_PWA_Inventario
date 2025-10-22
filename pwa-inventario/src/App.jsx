@@ -16,7 +16,7 @@ const NavBar = () => (
     <NavLink to="/entrada" style={{ margin: '0 10px', color: 'white', textDecoration: 'none' }}>Nueva Entrada</NavLink>
     <NavLink to="/salida" style={{ margin: '0 10px', color: 'white', textDecoration: 'none' }}>Nueva Salida</NavLink>
     <NavLink to="/caducidades" style={{ margin: '0 10px', color: 'white', textDecoration: 'none' }}>Alerta Caducidades 🚦</NavLink>
-    <NavLink to="/informes" style={{ margin: '0 10px', color: 'white', textDecoration: 'none' }}>Trazabilidad / PDF</NavLink>
+    <NavLink to="/informes" style={{ margin: '0 10px', color: 'white', textDecoration: 'none' }}>Movimientos / PDF</NavLink>
     {/* Se elimina el NavLink a /modificar ya que la navegación es dinámica desde /informes */}
 </nav>
 );

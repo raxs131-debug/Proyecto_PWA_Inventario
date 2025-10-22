@@ -492,16 +492,27 @@ export const getHistorialMovimientos = async (req, res) => {
 
     // Filtro por PERIODO DE TIEMPO
     if (fechaInicio || fechaFin) {
-        query.fecha = {};
-        if (fechaInicio) {
-            query.fecha.$gte = new Date(fechaInicio);
-        }
-        if (fechaFin) {
-            const dateFin = new Date(fechaFin);
-            dateFin.setDate(dateFin.getDate() + 1); // Lo ajusta al inicio del día siguiente
-            query.fecha.$lte = dateFin; 
-        }
-    }
+    query.fecha = {};
+    
+    if (fechaInicio) {
+        // 1. Crear la medianoche del día de inicio (ej. 2025-10-21 00:00:00.000Z)
+        const dateInicio = new Date(fechaInicio);
+        // Usamos setUTCHours(0, 0, 0, 0) para forzar la medianoche en UTC
+        dateInicio.setUTCHours(0, 0, 0, 0); 
+        query.fecha.$gte = dateInicio; // Desde el inicio del día
+    }
+    
+    if (fechaFin) {
+        // 2. Crear la medianoche del día siguiente al día final (ej. 2025-10-22 00:00:00.000Z)
+        const dateFin = new Date(fechaFin);
+        dateFin.setUTCHours(0, 0, 0, 0); // Forzar la medianoche en UTC del día final
+        
+        // CORRECCIÓN: Usar $lt (menor que) y sumar UN DÍA completo.
+        // Esto captura todo el día hasta un milisegundo antes de la medianoche del día siguiente.
+        dateFin.setDate(dateFin.getDate() + 1); // Lo ajusta al inicio del día siguiente
+        query.fecha.$lt = dateFin; // Cambiado de $lte a $lt para mayor precisión.
+    }
+}
 
     try {
         const movimientos = await Movimiento.find(query) 
