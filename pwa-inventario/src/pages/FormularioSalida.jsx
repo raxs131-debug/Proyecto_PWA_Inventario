@@ -222,7 +222,7 @@ const FormularioSalida = () => {
                         <label>Frecuencia:</label>
                         <input type="text" name="frecuencia" value={formData.datosPaciente.frecuencia} onChange={handleChange} required={mostrarDatosPaciente} />
 
-                        <label>Doctor:</label>
+                        <label>Medicó:</label>
                         <input type="text" name="doctor" value={formData.datosPaciente.doctor} onChange={handleChange} required={mostrarDatosPaciente} />
                         
                         <label>Folio de Receta:</label>
