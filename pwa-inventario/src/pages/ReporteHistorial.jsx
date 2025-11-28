@@ -15,7 +15,6 @@ const ReporteHistorial = () => {
         fechaFin: ''
     });
 
-    // Función para construir la URL con los filtros
     const buildQueryString = (params) => {
         const query = new URLSearchParams();
         Object.keys(params).forEach(key => {
@@ -61,7 +60,7 @@ const ReporteHistorial = () => {
         window.open(url, '_blank', 'noopener,noreferrer');
     };
 
-    // Función para navegar al formulario de modificación (Requisito 2.4)
+    // Función para navegar al formulario de modificación
     const handleModificar = (id) => {
         navigate(`/movimientos/modificar/${id}`); 
     };
@@ -86,7 +85,7 @@ const ReporteHistorial = () => {
             <h2>Historial de Movimientos</h2>
             <p>Filtra los movimientos y usa el botón para modificar Entradas y Salidas.</p>
             
-            {/* --- CONTROLES DE FILTROS (2.6) --- */}
+            {/* --- CONTROLES DE FILTROS --- */}
             <div style={{ 
                 display: 'flex', gap: '20px', marginBottom: '20px', padding: '15px',
                 border: '1px solid #ccc', borderRadius: '8px'
@@ -146,7 +145,6 @@ const ReporteHistorial = () => {
                                 <td style={{ padding: '10px', border: '1px solid #ddd' }}>{mov.responsable}</td>
                                 <td style={{ padding: '10px', border: '1px solid #ddd', fontSize: '12px' }}>{getDetallesString(mov.detalles)}</td>
                                 <td style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'center' }}>
-                                    {/* 🎯 CORRECCIÓN CLAVE: El botón ahora se muestra para Entrada Y Salida */}
                                     {['Entrada', 'Salida'].includes(mov.tipoMovimiento) && (
                                         <button 
                                             onClick={() => handleModificar(mov._id)}

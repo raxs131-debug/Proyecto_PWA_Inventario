@@ -29,7 +29,7 @@ const FormularioModificarEntrada = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // 1. Cargar Catálogo de Medicamentos y Personal (Rutas corregidas)
+                // 1. Cargar Catálogo de Medicamentos y Personal
                 const [medsResponse, personalResponse] = await Promise.all([
                     apiClient.get('/inventario/medicamentos'),
                     apiClient.get('/inventario/personal')
@@ -39,7 +39,6 @@ const FormularioModificarEntrada = () => {
 
                 // 2. Cargar DATOS DEL MOVIMIENTO ORIGINAL
                 if (id) {
-                    // 🎯 CORRECCIÓN DE RUTA 1: Añadido '/inventario'
                     const movResponse = await apiClient.get(`/inventario/movimientos/${id}`); 
                     const originalData = movResponse.data;
                     
@@ -52,7 +51,6 @@ const FormularioModificarEntrada = () => {
                         factura: originalData.datosEntrada?.factura || '',
                         proveedor: originalData.datosEntrada?.proveedor || '',
                         lote: originalData.datosEntrada?.lote || '',
-                        // Asegura que la fecha esté en formato 'YYYY-MM-DD'
                         caducidad: originalData.datosEntrada?.caducidad ? 
                                 new Date(originalData.datosEntrada.caducidad).toISOString().split('T')[0] : '',
                         responsable: originalData.responsable || '',
@@ -90,7 +88,6 @@ const FormularioModificarEntrada = () => {
         }
 
         try {
-            // 🎯 CORRECCIÓN DE RUTA 2: Añadido '/inventario' y ruta completa para PUT
             const response = await apiClient.put(`/inventario/movimientos/entrada/${id}`, formData); 
             setMensaje(`✅ Éxito: ${response.data.message}`);
             
@@ -160,7 +157,7 @@ const FormularioModificarEntrada = () => {
                     <p style={{ marginTop: '10px', padding: '10px', backgroundColor: '#fff3cd', fontWeight: 'bold', borderLeft: '4px solid #ffc107' }}>
                         Costo Total Modificado: ${costoTotalCalculado.toFixed(2)}
                     </p>
-                                        
+
                     <label>Responsable del Movimiento:</label>
                     <select name="responsable" value={formData.responsable} onChange={handleChange} required>
                         <option value="">Seleccione el responsable</option>

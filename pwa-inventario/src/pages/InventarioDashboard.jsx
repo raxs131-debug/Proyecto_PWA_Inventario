@@ -11,7 +11,6 @@ useEffect(() => {
     const fetchInventario = async () => {
     try {
         setLoading(true);
-        // Llama al endpoint que creamos en Node.js
         const response = await apiClient.get('/inventario'); 
         setInventario(response.data);
     } catch (err) {
@@ -48,7 +47,7 @@ return (
             <td>{med.claveCB}</td>
             <td>{med.descripcion}</td>
             <td>{med.presentacion}</td>
-              {/* TOTAL DE ENZIMAS viene ya calculado desde el backend */}
+              {/* TOTAL DE ENZIMAS */}
             <td><strong>{med.totalEnzimas.toLocaleString()}</strong></td> 
             </tr>
         ))}

@@ -39,9 +39,6 @@ function App() {
           <Route path="/caducidades" element={<ReporteCaducidades />} />
             {/* INFORMES/TRAZABILIDAD (Requisitos 2.4 y 2.6) */}
           <Route path="/informes" element={<ReporteHistorial />} />
-
-            {/* 🎯 RUTA FINAL PARA MODIFICACIÓN (Requisito 2.4) */}
-            {/* Esta ruta usa el parámetro dinámico ':id' para cargar el movimiento a editar */}
           <Route path="/movimientos/modificar/:id" element={<FormularioModificarEntrada />} />
           </Routes>
         </div>

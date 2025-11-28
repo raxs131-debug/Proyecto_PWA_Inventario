@@ -2,22 +2,14 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
-// ==========================================================
-// 📚 ARCHIVOS DE TRADUCCIÓN (Resources)
-// Usamos namespaces (por ejemplo, 'common' y 'dashboard')
-// ==========================================================
-
 const resources = {
   // Traducciones en Español (es)
   es: {
-    // 1. Namespace 'common' (Textos usados en toda la app, como títulos de navegación)
     common: {
       "change_language": "Cambiar Idioma",
       "form_entry": "Formulario de Entrada",
       "global_inventory": "Inventario Global",
-      // Añade más textos comunes aquí (ej: 'Guardar', 'Cancelar')
     },
-    // 2. Namespace 'dashboard' (Textos específicos de InventarioDashboard.jsx)
     dashboard: {
       "dashboard_title": "Inventario General de Medicamentos",
       "loading_inventory": "Cargando inventario...",
@@ -30,13 +22,10 @@ const resources = {
       "table_header_total_enzymes": "TOTAL DE ENZIMAS",
       "empty_inventory_message": "No hay datos en el inventario. Asegúrate de registrar una Entrada.",
     },
-    // 3. Namespace 'entryForm' (Texto para FormularioEntrada.jsx)
     entryForm: {
         "title": "Registro de Entrada de Medicamentos",
         "submit_button": "Registrar Entrada",
-        // ... Agrega claves del formulario
     },
-    // Añade más namespaces aquí para el resto de tus vistas: 'exitForm', 'historyReport', etc.
   },
   
   // Traducciones en Inglés (en)
@@ -70,9 +59,7 @@ i18n
   .use(initReactI18next) 
   .init({
     resources,
-    // Define los namespaces que acabas de crear
     ns: ['common', 'dashboard', 'entryForm'], 
-    // Establece el namespace que se usará por defecto si no se especifica uno
     defaultNS: 'common', 
     fallbackLng: 'es', 
     detection: {

@@ -3,21 +3,12 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 
-// ❌ LÍNEA ELIMINADA:
-// import * as serviceWorkerRegistration from './serviceWorkerRegistration'; 
-
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
   </StrictMode>,
 )
 
-// ==========================================================
-// 🎯 REGISTRO DEL SERVICE WORKER (PWA)
-// ==========================================================
-
-// El registro solo ocurre en modo de producción (después de 'npm run build')
-// para evitar problemas en el servidor de desarrollo de Vite.
 if (process.env.NODE_ENV === 'production') {
     // 1. Verifica si el navegador soporta Service Workers
     if ('serviceWorker' in navigator) {

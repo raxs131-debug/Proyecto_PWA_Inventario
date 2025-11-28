@@ -16,8 +16,8 @@ const initialFormData = {
 
 const FormularioEntrada = () => {
     const [formData, setFormData] = useState(initialFormData);
-    const [medicamentos, setMedicamentos] = useState([]); // Catálogo de Medicamentos
-    const [personal, setPersonal] = useState([]);      // Catálogo de Personal
+    const [medicamentos, setMedicamentos] = useState([]);
+    const [personal, setPersonal] = useState([]);
     const [mensaje, setMensaje] = useState('');
     const [loading, setLoading] = useState(true);
 
@@ -25,8 +25,6 @@ const FormularioEntrada = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // 🎯 CORRECCIÓN CLAVE: Agregamos el prefijo '/inventario'
-                // Ya que tu server.js usa: app.use('/api/inventario', inventarioRoutes);
 
                 // 1. Cargar Catálogo de Medicamentos
                 const medsResponse = await apiClient.get('/inventario/medicamentos'); // <--- RUTA CORREGIDA
@@ -38,7 +36,6 @@ const FormularioEntrada = () => {
 
                 setLoading(false);
             } catch (error) {
-                // Es muy importante mostrar este error si falla el catálogo
                 console.error("Error al cargar catálogos:", error);
                 setMensaje('❌ Error al conectar con el servidor para cargar catálogos. Revisa la consola (F12) y el backend.');
                 setLoading(false);
@@ -50,7 +47,6 @@ const FormularioEntrada = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        // Convertir a número si es el caso. Asegura que no se intente parsear una cadena vacía
         let parsedValue = value;
         if (name === 'costoUnitario' || name === 'totalEnzimas') {
             parsedValue = value === '' ? 0 : parseFloat(value);
@@ -63,17 +59,13 @@ const FormularioEntrada = () => {
         e.preventDefault();
         setMensaje('');
 
-        // Asegurarse de que el costoUnitario y totalEnzimas no sean NaN o 0 (si son obligatorios)
         if (isNaN(formData.costoUnitario) || isNaN(formData.totalEnzimas) || formData.totalEnzimas <= 0) {
             setMensaje('❌ Error: El costo y la cantidad deben ser números válidos y mayores a cero.');
             return;
         }
 
         try {
-            // Envío de datos al backend de Node.js
-            // 🎯 VERIFICACIÓN: Esta ruta ya es correcta si la tienes definida como: 
-            // router.post('/movimientos/entrada', createEntrada) en inventario.js
-            const response = await apiClient.post('/inventario/movimientos/entrada', formData); // <-- Agregar prefijo
+            const response = await apiClient.post('/inventario/movimientos/entrada', formData);
             setMensaje(`✅ Éxito: ${response.data.message} Lote: ${formData.lote}`);
             setFormData(initialFormData); // Limpiar formulario
         } catch (error) {

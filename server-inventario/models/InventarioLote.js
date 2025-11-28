@@ -1,9 +1,7 @@
-// server-inventario/models/InventarioLote.js
-
 import mongoose from 'mongoose';
 
 const InventarioLoteSchema = new mongoose.Schema({
-    // Clave del Medicamento (referencia al catálogo Medicamento)
+    // Clave del Medicamento 
     claveCB: { 
         type: String, 
         required: true 
@@ -13,7 +11,7 @@ const InventarioLoteSchema = new mongoose.Schema({
         type: String, 
         required: true 
     },
-    // Fecha de Caducidad (CRÍTICO para FEFO y el Reporte de Caducidades)
+    // Fecha de Caducidad 
     caducidad: { 
         type: Date, 
         required: true 
@@ -35,7 +33,7 @@ const InventarioLoteSchema = new mongoose.Schema({
         ref: 'Medicamento'
     }
 }, { 
-    timestamps: true // Añade campos createdAt y updatedAt automáticamente
+    timestamps: true 
 });
 
 // Crear un índice único compuesto para prevenir duplicados de lotes

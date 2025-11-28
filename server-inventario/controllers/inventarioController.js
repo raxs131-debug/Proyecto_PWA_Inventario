@@ -4,10 +4,6 @@ import Personal from '../models/Personal.js';
 import InventarioLote from '../models/InventarioLote.js';
 import PDFDocument from 'pdfkit'; 
 
-// ===================================================================
-// 1. INVENTARIO GLOBAL (Requisito 2.1)
-// ===================================================================
-
 export const getInventarioGlobal = async (req, res) => {
     try {
         // 1. USAR InventarioLote: Agrupar por claveCB y sumar el stock
@@ -49,10 +45,6 @@ export const getInventarioGlobal = async (req, res) => {
     }
 };
 
-// ===================================================================
-// 2. CREAR ENTRADA (Requisito 2.2)
-// ===================================================================
-
 export const createEntrada = async (req, res) => {
     const { 
         claveCB, laboratorio, costoUnitario, totalEnzimas, pedido, factura, 
@@ -68,7 +60,6 @@ export const createEntrada = async (req, res) => {
         const cantidadQueEntra = parseFloat(totalEnzimas);
         const fechaCaducidad = new Date(caducidad);
 
-        // *** GESTIÓN DEL INVENTARIO POR LOTE (InventarioLote) ***
         let inventarioLote = await InventarioLote.findOne({ claveCB, lote });
 
         if (inventarioLote) {
@@ -123,10 +114,6 @@ export const createEntrada = async (req, res) => {
     }
 };
 
-// ===================================================================
-// 3. CATALOGOS (Soporte para Formularios)
-// ===================================================================
-
 export const getMedicamentos = async (req, res) => {
     try {
         const medicamentosList = await Medicamento.find().select('claveCB descripcion presentacion unidadMedida');
@@ -147,18 +134,10 @@ export const getPersonal = async (req, res) => {
     }
 };
 
-// ===================================================================
-// 4. SALIDA Y FEFO (Requisito 2.3)
-// ===================================================================
-
-/**
- * Obtiene lotes disponibles de un medicamento ordenados por caducidad (FEFO).
- */
 export const getLotesFEFO = async (req, res) => {
-    const { claveCB } = req.query; // <-- Es crucial usar req.query para obtener el parámetro
+    const { claveCB } = req.query; 
 
     if (!claveCB) {
-        // Devuelve un 400 Bad Request si falta el parámetro
         return res.status(400).json({ message: 'Se requiere la claveCB para obtener lotes FEFO.' }); 
     }
 
@@ -185,13 +164,11 @@ export const getLotesFEFO = async (req, res) => {
 
     } catch (error) {
         console.error('Error al obtener lotes FEFO:', error);
-        // Devuelve un 500 Internal Server Error si hay un fallo en la DB
         res.status(500).json({ message: 'Error interno del servidor.' }); 
     }
 };
 
 export const registrarSalida = async (req, res) => {
-    // El frontend debe enviar: claveCB, cantidad (cantidad a salir), responsable, motivo, datosPaciente (string JSON si aplica)
     const { claveCB, cantidad, responsable, motivo, datosPaciente } = req.body;
     const cantidadRequerida = parseFloat(cantidad);
 
@@ -222,11 +199,9 @@ export const registrarSalida = async (req, res) => {
 
             const cantidadTomada = Math.min(lote.stock, cantidadPendiente);
             
-            // a. Actualizar el stock del lote en la BD
             lote.stock -= cantidadTomada;
             await lote.save(); 
 
-            // b. Registrar el detalle del movimiento para trazabilidad
             movimientosDeSalida.push({
                 lote: lote.lote,
                 cantidad: cantidadTomada,
@@ -237,28 +212,24 @@ export const registrarSalida = async (req, res) => {
             cantidadPendiente -= cantidadTomada;
         }
 
-        // 4. Registrar el movimiento consolidado (TRAZABILIDAD)
-        // ------------------------------------------------------------------
         const datosPacienteValue = (motivo === 'Administración a Paciente' && datosPaciente) 
-            ? datosPaciente // El frontend envía el string JSON
-            : 'N/A'; // Si no aplica, usamos el default 'N/A' del esquema
+            ? datosPaciente 
+            : 'N/A'; 
 
         const nuevoMovimiento = new Movimiento({
             tipoMovimiento: 'Salida',
             claveCB: claveCB,
             fecha: new Date(),
             responsable,
-            // El campo 'motivo' del nivel superior no debe estar aquí.
             cantidadTotal: cantidadRequerida,
             detalles: movimientosDeSalida, 
             datosSalida: { 
-                motivoSalida: motivo, // Requerido por el sub-esquema
-                cantidadEnzimasSalida: cantidadRequerida, // Requerido por el sub-esquema
+                motivoSalida: motivo, 
+                cantidadEnzimasSalida: cantidadRequerida, 
                 datosPaciente: datosPacienteValue
             }
         });
         await nuevoMovimiento.save();
-        // ------------------------------------------------------------------
 
         res.status(200).json({ 
             message: `Salida de ${cantidadRequerida} unidades de ${claveCB} registrada exitosamente usando FEFO.`,
@@ -267,9 +238,7 @@ export const registrarSalida = async (req, res) => {
 
     } catch (error) {
         console.error('Error al registrar salida FEFO:', error);
-        
-        // 🚨 CORRECCIÓN AÑADIDA: Manejo de errores de validación de Mongoose
-        if (error.name === 'ValidationError') {
+            if (error.name === 'ValidationError') {
             console.error('Detalles de la validación de Mongoose:', error.errors);
             return res.status(400).json({ 
                 message: 'Error de validación al registrar el movimiento. Revise el esquema.', 
@@ -285,13 +254,6 @@ export const registrarSalida = async (req, res) => {
     }
 };
 
-// ===================================================================
-// 5. MODIFICACIÓN (Requisito 2.4)
-// ===================================================================
-
-/**
- * Obtiene los detalles completos de un movimiento por su ID para pre-llenado.
- */
 export const getMovimientoById = async (req, res) => {
     try {
         const movimiento = await Movimiento.findById(req.params.id);
@@ -300,7 +262,6 @@ export const getMovimientoById = async (req, res) => {
             return res.status(404).json({ message: 'Movimiento no encontrado.' });
         }
 
-        // Obtener detalles del catálogo para enriquecer la respuesta
         const medicamento = await Medicamento.findOne({ claveCB: movimiento.claveCB });
         const responsable = await Personal.findOne({ nombre: movimiento.responsable }); 
 
@@ -417,11 +378,6 @@ export const updateEntrada = async (req, res) => {
     }
 };
 
-// ===================================================================
-// 6. TRAZABILIDAD Y REPORTES (Requisitos 2.5, 2.6)
-// ===================================================================
-
-// Requisito 2.5: Reporte de Caducidades (Semáforo)
 export const getReporteCaducidades = async (req, res) => {
     try {
         const lotes = await InventarioLote.find({
@@ -477,14 +433,9 @@ export const getReporteCaducidades = async (req, res) => {
 };
 
 
-// Requisito 2.6: Obtener el historial de movimientos CON FILTROS
 export const getHistorialMovimientos = async (req, res) => {
-    // 1. Obtener los filtros del query
     const { tipo, fechaInicio, fechaFin } = req.query; 
-
-    // 2. Construir el objeto de consulta (query) para MongoDB
     const query = {};
-
     // Filtro por TIPO DE MOVIMIENTO
     if (tipo && (tipo === 'Entrada' || tipo === 'Salida')) {
         query.tipoMovimiento = tipo;
@@ -493,24 +444,17 @@ export const getHistorialMovimientos = async (req, res) => {
     // Filtro por PERIODO DE TIEMPO
     if (fechaInicio || fechaFin) {
     query.fecha = {};
-    
     if (fechaInicio) {
-        // 1. Crear la medianoche del día de inicio (ej. 2025-10-21 00:00:00.000Z)
         const dateInicio = new Date(fechaInicio);
-        // Usamos setUTCHours(0, 0, 0, 0) para forzar la medianoche en UTC
         dateInicio.setUTCHours(0, 0, 0, 0); 
-        query.fecha.$gte = dateInicio; // Desde el inicio del día
+        query.fecha.$gte = dateInicio; 
     }
     
     if (fechaFin) {
-        // 2. Crear la medianoche del día siguiente al día final (ej. 2025-10-22 00:00:00.000Z)
         const dateFin = new Date(fechaFin);
-        dateFin.setUTCHours(0, 0, 0, 0); // Forzar la medianoche en UTC del día final
-        
-        // CORRECCIÓN: Usar $lt (menor que) y sumar UN DÍA completo.
-        // Esto captura todo el día hasta un milisegundo antes de la medianoche del día siguiente.
-        dateFin.setDate(dateFin.getDate() + 1); // Lo ajusta al inicio del día siguiente
-        query.fecha.$lt = dateFin; // Cambiado de $lte a $lt para mayor precisión.
+        dateFin.setUTCHours(0, 0, 0, 0); 
+        dateFin.setDate(dateFin.getDate() + 1); 
+        query.fecha.$lt = dateFin; 
     }
 }
 
@@ -519,7 +463,6 @@ export const getHistorialMovimientos = async (req, res) => {
             .sort({ fecha: -1 }) 
             .limit(500); 
 
-        // 3. Enriquecimiento de datos (usando el catálogo)
         const clavesUnicas = [...new Set(movimientos.map(m => m.claveCB))];
         const catalogo = await Medicamento.find({ claveCB: { $in: clavesUnicas } }).select('claveCB descripcion presentacion');
         
@@ -535,9 +478,8 @@ export const getHistorialMovimientos = async (req, res) => {
                     cantidad = mov.datosEntrada?.totalEnzimas || 'N/A';
                     lotesAfectados = mov.datosEntrada?.lote || 'N/A';
                     motivoSalida = 'Entrada (Registro)';
-                } else { // Salida
+                } else {
                     cantidad = mov.cantidadTotal || 'N/A';
-                    // ✅ CORRECCIÓN: Sólo usamos la propiedad anidada.
                     motivoSalida = mov.datosSalida?.motivoSalida || 'N/A'; 
                     lotesAfectados = mov.detalles ? mov.detalles.map(d => `${d.lote} (${d.cantidad})`).join(', ') : 'N/A';
                 }
@@ -571,12 +513,9 @@ export const getHistorialMovimientos = async (req, res) => {
     }
 };
 
-// Requisito 2.6: Generar PDF del historial de movimientos (Aplica los mismos filtros)
 export const generateHistorialPDF = async (req, res) => {
-    // 1. Obtener los filtros del query (IGUAL que getHistorialMovimientos)
     const { tipo, fechaInicio, fechaFin } = req.query; 
 
-    // 2. Construir el objeto de consulta (query) para MongoDB
     const query = {};
 
     if (tipo && (tipo === 'Entrada' || tipo === 'Salida')) {
@@ -595,12 +534,10 @@ export const generateHistorialPDF = async (req, res) => {
     }
     
     try {
-        // Obtenemos los datos con los filtros
         const movimientos = await Movimiento.find(query)
             .sort({ fecha: -1 })
             .limit(500); 
 
-        // Enriquecimiento de datos
         const clavesUnicas = [...new Set(movimientos.map(m => m.claveCB))];
         const catalogo = await Medicamento.find({ claveCB: { $in: clavesUnicas } }).select('claveCB descripcion presentacion unidadMedida');
         
@@ -614,7 +551,6 @@ export const generateHistorialPDF = async (req, res) => {
             const fecha = new Date(mov.fecha).toLocaleDateString('es-MX');
             const tipo = mov.tipoMovimiento || mov.tipo;
 
-            // Lógica para formatear los detalles
             const datos = (tipo === 'Entrada') ? 
                 `Lote: ${mov.datosEntrada ? mov.datosEntrada.lote : 'N/A'}, Cantidad: ${mov.datosEntrada ? mov.datosEntrada.totalEnzimas : 'N/A'}, Cad.: ${mov.datosEntrada && mov.datosEntrada.caducidad ? new Date(mov.datosEntrada.caducidad).toLocaleDateString('es-MX') : 'N/A'}` : 
                 `Cantidad: ${mov.cantidadTotal || 'N/A'}, Motivo: ${mov.datosSalida?.motivoSalida || 'N/A'}, Lotes: ${mov.detalles ? mov.detalles.map(d => `${d.lote} (${d.cantidad})`).join(', ') : 'N/A'}`;
@@ -629,7 +565,7 @@ export const generateHistorialPDF = async (req, res) => {
             };
         });
 
-        // Generación del PDF (el código de PDFkit es funcional)
+        // Generación del PDF
         const doc = new PDFDocument({ margin: 30, size: 'A4' });
 
         res.setHeader('Content-Type', 'application/pdf');
@@ -641,7 +577,6 @@ export const generateHistorialPDF = async (req, res) => {
         doc.fontSize(10).text(`Filtro: Tipo=${tipo || 'Ambos'}, Periodo=${fechaInicio || 'Inicio'} a ${fechaFin || 'Fin'}`, { align: 'center' });
         doc.moveDown(1.5);
 
-        // Cabecera de la tabla (Ajustada ligeramente para PDFkit)
         const tableTop = doc.y;
         const col1 = 50;
         const col2 = 120;

@@ -1,5 +1,3 @@
-// inventario.js
-
 import express from 'express';
 import { 
     getInventarioGlobal, 
@@ -18,15 +16,14 @@ import {
 const router = express.Router();
 
 // --- CATÁLOGOS ---
-// Ruta para obtener el catálogo de medicamentos (NECESARIO)
 router.get('/medicamentos', getMedicamentos);
 
-// Ruta para obtener el catálogo de personal (NECESARIO)
+// Ruta para obtener el catálogo de personal 
 router.get('/personal', getPersonal);
 
 
-// --- INVENTARIO / DASHBOARD ---
-// Ruta para el Inventario Dashboard (Requisito 2.1)
+// --- INVENTARIO ---
+// Ruta para el Inventario 
 router.get('/', getInventarioGlobal);
 
 
@@ -35,22 +32,19 @@ router.get('/', getInventarioGlobal);
 router.post('/movimientos/entrada', createEntrada); 
 
 // Ruta para Generar Salidas (FEFO)
-// Nota: Usamos solo una función (registrarSalida) para evitar duplicidad
 router.post('/movimientos/salida', registrarSalida); 
 
 
 // --- UTILIDADES FEFO ---
-// Ruta para obtener lotes disponibles ordenados por FEFO (Sugerencia)
 router.get('/lotes/fefo', getLotesFEFO); 
 
 // --- REPORTES ---
 
-// 1. REPORTE DE CADUCIDADES (Ruta Única y Clara)
-// Frontend llama a: /api/reporte/caducidades
+// 1. REPORTE DE CADUCIDADES 
 router.get('/reporte/caducidades', getReporteCaducidades); 
 
 
-// 2. REPORTE DE TRAZABILIDAD / HISTORIAL (Retorna JSON)
+// 2. REPORTE DE TRAZABILIDAD / HISTORIAL 
 router.get('/reportes/historial', getHistorialMovimientos); 
 
 // 3. REPORTE DE TRAZABILIDAD / HISTORIAL (Descarga PDF)

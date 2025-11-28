@@ -11,12 +11,9 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/farmaciaDB'; 
 
-// --- Middlewares ---
-// Habilitar CORS para permitir solicitudes desde el frontend de React
 app.use(cors({
     origin: ['http://localhost:5173', 'http://localhost:3000'] // Asegúrate de que este es el puerto de tu React
 }));
-// Permite al servidor procesar JSON en el cuerpo de las peticiones
 app.use(express.json());
 
 // --- Conexión a MongoDB ---

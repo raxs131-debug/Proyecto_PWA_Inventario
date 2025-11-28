@@ -9,7 +9,6 @@ const ReporteCaducidades = () => {
     useEffect(() => {
         const fetchReporte = async () => {
             try {
-                // 🎯 CORRECCIÓN CLAVE: Se añade el prefijo '/inventario' a la ruta del reporte.
                 const response = await apiClient.get('/inventario/reporte/caducidades');
                 setReporte(response.data);
             } catch (err) {
@@ -24,15 +23,14 @@ const ReporteCaducidades = () => {
     }, []);
 
     const getRowColor = (semaforo) => {
-        // Los colores se basan en la propiedad 'semaforo' que viene del backend
         switch (semaforo) {
             case 'Rojo':
-                return 'rgba(255, 1, 1, 0.58)'; // Rojo claro para alerta crítica
+                return 'rgba(255, 1, 1, 0.58)'; // Rojo para alerta crítica
             case 'Amarillo':
-                return 'rgba(255, 255, 0, 0.5)'; // Amarillo claro para precaución
+                return 'rgba(255, 255, 0, 0.5)'; // Amarillo para precaución
             case 'Verde':
             default:
-                return 'rgba(98, 255, 0, 1)'; // Verde claro para sin riesgo
+                return 'rgba(98, 255, 0, 1)'; // Verde para sin riesgo
         }
     };
 
@@ -54,7 +52,6 @@ const ReporteCaducidades = () => {
             ) : (
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
                     <thead>
-                        {/* El color de fondo es oscuro, por lo que el texto debe ser CLARO (white) */}
                         <tr style={{ backgroundColor: '#dc3545', color: 'white' }}> 
                             <th style={{ padding: '10px', border: '1px solid #ddd', color: 'white' }}>Clave CB</th> 
                             <th style={{ padding: '10px', border: '1px solid #ddd', color: 'white' }}>Descripción</th> 
@@ -69,7 +66,6 @@ const ReporteCaducidades = () => {
                         {reporte.map((item, index) => (
                             <tr 
                                 key={item._id || index} 
-                                // El color del texto debe ser negro para contrastar con los fondos claros (rojo/amarillo/verde claro)
                                 style={{ backgroundColor: getRowColor(item.semaforo), color: 'black' }}
                             >
                                 <td style={{ padding: '10px', border: '1px solid #ddd' }}>{item.claveCB}</td>
@@ -84,7 +80,6 @@ const ReporteCaducidades = () => {
                                     padding: '10px', 
                                     border: '1px solid #ddd', 
                                     fontWeight: 'bold',
-                                    // Mantiene el color del semáforo (rojo/amarillo/verde) para el texto de la alerta
                                     color: item.semaforo === 'Rojo' ? 'red' : item.semaforo === 'Amarillo' ? '#ffc107' : 'green'
                                 }}>
                                     {item.semaforo}

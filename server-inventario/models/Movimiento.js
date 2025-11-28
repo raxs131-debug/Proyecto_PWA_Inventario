@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-// Esquema para los detalles específicos de una SALIDA (Requiere 2.3)
+// Esquema para los detalles específicos de una SALIDA 
 const detalleSalidaSchema = new mongoose.Schema({
     lote: { type: String, required: true },
     cantidad: { type: Number, required: true, min: 1 },
@@ -8,11 +8,11 @@ const detalleSalidaSchema = new mongoose.Schema({
     caducidad: { type: Date, required: false },
 });
 
-// Esquema para los datos de una ENTRADA (Requisito 2.2 y 2.4)
+// Esquema para los datos de una ENTRADA 
 const datosEntradaSchema = new mongoose.Schema({
     laboratorio: { type: String, required: true },
     costoUnitario: { type: Number, required: true, min: 0 },
-    totalEnzimas: { type: Number, required: true, min: 1 }, // Cantidad que entra
+    totalEnzimas: { type: Number, required: true, min: 1 }, 
     pedido: { type: String, required: true },
     factura: { type: String, required: true },
     proveedor: { type: String, required: true },
@@ -26,17 +26,15 @@ const datosEntradaSchema = new mongoose.Schema({
 
 // Esquema para los datos de una SALIDA (Requisito 2.3)
 const datosSalidaSchema = new mongoose.Schema({
-    // 💡 CORRECCIÓN: Agregando 'Transferencia' al enum para validar el movimiento.
-    // También ajusté 'Devolución' a 'Devolución a Proveedor' para ser más explícito.
     motivoSalida: { 
         type: String, 
         required: true, 
         enum: [
             'Administración a Paciente', 
             'Merma', 
-            'Devolución a Proveedor', // Ajustado de 'Devolución'
+            'Devolución a Proveedor', 
             'Inventario',
-            'Transferencia' // <-- ¡Añadido para resolver el error!
+            'Transferencia' 
         ] 
     },
     cantidadEnzimasSalida: { type: Number, required: true, min: 1 },
@@ -44,11 +42,7 @@ const datosSalidaSchema = new mongoose.Schema({
 });
 
 
-// -------------------------------------------------------------
-// ESQUEMA PRINCIPAL DE MOVIMIENTO
-// -------------------------------------------------------------
 const movimientoSchema = new mongoose.Schema({
-    // Campos comunes
     tipoMovimiento: { 
         type: String, 
         required: true, 
@@ -87,7 +81,7 @@ const movimientoSchema = new mongoose.Schema({
     detalles: [detalleSalidaSchema],
 
 }, {
-    timestamps: true // Añade createdAt y updatedAt
+    timestamps: true 
 });
 
 const Movimiento = mongoose.model('Movimiento', movimientoSchema);

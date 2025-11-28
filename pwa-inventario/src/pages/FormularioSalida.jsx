@@ -101,17 +101,13 @@ const FormularioSalida = () => {
         }
 
         try {
-            // 💡 ESTA ES LA ESTRUCTURA QUE TU CONTROLADOR DEBE ESPERAR
             const dataToSend = {
                 claveCB: formData.claveCB,
-                // Usamos 'cantidad' y 'motivo' porque son los nombres que tu controlador usa para desestructurar req.body
                 cantidad: formData.cantidadEnzimasSalida, 
                 responsable: formData.responsable,
-                motivo: formData.motivoSalida, 
-                
-                // Enviamos datosPaciente serializado o undefined, dependiendo del motivo
+                motivo: formData.motivoSalida,                 
                 datosPaciente: formData.motivoSalida === 'Administración a Paciente' 
-                    ? JSON.stringify(formData.datosPaciente) // Envía como string
+                    ? JSON.stringify(formData.datosPaciente) 
                     : undefined
             };
 
@@ -174,9 +170,9 @@ const FormularioSalida = () => {
                     <select name="motivoSalida" value={formData.motivoSalida} onChange={handleChange} required>
                         <option value="">Seleccione el motivo</option>
                         <option value="Administración a Paciente">Administración a Paciente</option>
-                        <option value="Merma">Merma/Caducidad</option> {/* 💡 CORREGIDO: Valor Mongoose 'Merma' */}
-                        <option value="Devolución">Devolución</option> {/* 💡 CORREGIDO: Valor Mongoose 'Devolución' */}
-                        <option value="Inventario">Ajuste de Inventario</option> {/* 💡 CORREGIDO: Valor Mongoose 'Inventario' */}
+                        <option value="Merma">Merma/Caducidad</option> {/* Valor Mongoose 'Merma' */}
+                        <option value="Devolución">Devolución</option> {/* Valor Mongoose 'Devolución' */}
+                        <option value="Inventario">Ajuste de Inventario</option> {/* Valor Mongoose 'Inventario' */}
                     </select>
                     
                     <label>Responsable del Movimiento:</label>
